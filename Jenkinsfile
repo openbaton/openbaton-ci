@@ -8,32 +8,32 @@ pipeline {
         )
 	      string(
             name: 'NFVO',
-            defaultValue: 'refs/tags/4.0.0',
+            defaultValue: 'refs/tags/5.0.0',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
         string(
             name: 'VNFM_GENERIC',
-            defaultValue: 'refs/tags/4.0.0',
+            defaultValue: 'refs/tags/5.0.0',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
         string(
             name: 'VNFM_DUMMY_AMQP',
-            defaultValue: 'refs/tags/4.0.0',
+            defaultValue: 'refs/tags/5.0.0',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
         string(
             name: 'PLUGIN_VIMDRIVER_TEST',
-            defaultValue: 'refs/tags/4.0.0',
+            defaultValue: 'refs/tags/5.0.0',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
         string(
             name: 'PLUGIN_VIMDRIVER_OPENSTACK',
-            defaultValue: 'refs/tags/4.0.0',
+            defaultValue: 'refs/tags/5.0.0',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
         string(
             name: 'INTEGRATION_TESTS',
-            defaultValue: 'refs/tags/4.0.0',
+            defaultValue: 'refs/tags/5.0.0',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
     }
