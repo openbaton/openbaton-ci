@@ -103,7 +103,7 @@ The current implementation of the `after commit` trigger is polling the relevant
 Add the JSON file to the correct folder on your deployment, as configured in the environment variables. As naming convetion, use the IP of the used testbed. Add the name (without .json suffix) to the choice parameter in [test-main](https://gitlab.fokus.fraunhofer.de/openbaton/openbaton-ci/blob/525079b7808ff73ef4c9ec2f4d397930575dda43/Jenkinsfile#L31). It will be available after the next scm checkout of this branch.
 
 ## Add integration-test
-After adding the test to the integration-tests, add a new stage corresponding to the new scenario to either the [vnfm-dummy](https://gitlab.fokus.fraunhofer.de/openbaton/openbaton-ci/tree/test-dummy) or [vnfm-generic](https://gitlab.fokus.fraunhofer.de/openbaton/openbaton-ci/tree/test-generic) Pipeline.
+After adding the test to the integration-tests, add a new stage corresponding to the new scenario to either the [vnfm-dummy](https://github.com/openbaton/openbaton-ci/blob/23f21a5d2e70248b9f365fc9ba8c175b284a3efc/Jenkinsfile#L6) or [vnfm-generic](https://github.com/openbaton/openbaton-ci/blob/280abc2178442318e86bda19660ab6b13f04230b/Jenkinsfile#L6) Pipeline. Add it as a possible choice and also as a new stage.
 
 When running e.g. `test-main` be sure to include `trigger build` as seen in this image. This is needed because the integration-test container has to be rebuild to include any changes.
 ![](./img/trigger-build.png)
