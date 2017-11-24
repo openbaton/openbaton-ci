@@ -91,7 +91,7 @@ Because the integration tests need some "node specific" configuration (i.e. real
 - `full-compose`: Full deployment with all external components. No sense in using yet as there are no tests for the components
 
 ### Periodic or hooked builds
-To set a pipeline to automatically build based on cron-style times, see the example pipeline for [every night](https://gitlab.fokus.fraunhofer.de/openbaton/openbaton-ci/blob/c4ed906a7273d53c93b4cf7ae1782757f021ccc2/Jenkinsfile#L3). The syntax is described [here](https://jenkins.io/doc/book/pipeline/syntax/#triggers). If unfamiliar with cron-style strings, check [here](https://crontab-generator.org/).
+To set a pipeline to automatically build based on cron-style times, see the example pipeline for [every night](https://github.com/openbaton/openbaton-ci/blob/dd58f3f88719edee5b453fd2aac34bad95da7c0a/Jenkinsfile#L8). The syntax is described [here](https://jenkins.io/doc/book/pipeline/syntax/#triggers). If unfamiliar with cron-style strings, check [here](https://crontab-generator.org/).
 
 Relevant links for webhook based integrations:
 - https://thepracticalsysadmin.com/setting-up-a-github-webhook-in-jenkins/
