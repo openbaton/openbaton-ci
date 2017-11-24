@@ -105,7 +105,10 @@ pipeline {
         stage('Test dummy-amqp') {
             when { expression { params.SYSTEM_UNDER_TEST != 'standalone' && (params.VNFM_TO_TEST == 'dummy-amqp' || params.VNFM_TO_TEST == 'all') } }
             steps {
-                build job: 'test-dummy', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'BRANCH', value: params.BRANCH)]
+                script {
+                    tag = (params.BRANCH == 'master' || params.BRANCH == 'develop') ? 'latest' : params.BRANCH 
+                }
+                build job: 'test-dummy', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'BRANCH', value: tag)]
             }
         }
     }
