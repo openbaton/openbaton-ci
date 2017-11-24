@@ -1,0 +1,31 @@
+version: '3'
+services:
+  nfvo:
+    image: openbaton/nfvo:latest
+    depends_on:
+      - rabbitmq_broker
+      - nfvo_database
+    restart: always
+    environment: 
+      - NFVO_RABBIT_BROKERIP=rabbitmq_broker
+      - NFVO_PLUGIN_INSTALLATION-DIR=/dev/null
+      - SPRING_RABBITMQ_HOST=rabbitmq_broker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://nfvo_database:3306/openbaton
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.mariadb.jdbc.Driver
+      - SPRING_JPA_DATABASE-PLATFORM=org.hibernate.dialect.MySQLDialect
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+    ports:
+      - "8088:8080"
+  nfvo_database:
+    image: mysql/mysql-server
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_DATABASE=openbaton
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=changeme
+  rabbitmq_broker:
+    image: rabbitmq:3-management-alpine
+    hostname: openbaton-rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=openbaton
