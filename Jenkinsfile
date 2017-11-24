@@ -8,7 +8,7 @@ pipeline {
         )
         string(
             name: 'TO',
-            defaultValue: 'refs/heads/develop',
+            defaultValue: 'refs/heads/master',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>, leave empty to use last build'
         )
     }
