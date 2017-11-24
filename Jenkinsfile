@@ -21,19 +21,28 @@ pipeline {
     }
 
     stages {
-        stage('Run scenarios') {
+        stage('Run scenario-dummy-iperf') {
+            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'scenario-dummy-iperf' || params.TEST_SET == 'simple' } }
             steps {
-                script {
-                    if (params.TEST_SET == 'simple') {
-                        test_set = 'scenario-dummy-iperf'
-                    }
-                    if (params.TEST_SET != 'all') {
-                        test_set = test_set + '.ini'
-                    } else {
-                        test_set = ''
-                    }
-                    sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key -v $INTEGRATION_TESTS_CONFIG:/etc/openbaton/integration-tests/integration-tests.properties openbaton/integration-tests:${params.BRANCH} $test_set"
-                }
+                sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key -v $INTEGRATION_TESTS_CONFIG:/etc/openbaton/integration-tests/integration-tests.properties openbaton/integration-tests:${params.BRANCH} scenario-dummy-iperf.ini"
+            }
+        }
+        stage('Run scenario-many-dependencies') {
+            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'scenario-many-dependencies'} }
+            steps {
+                sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key -v $INTEGRATION_TESTS_CONFIG:/etc/openbaton/integration-tests/integration-tests.properties openbaton/integration-tests:${params.BRANCH} scenario-many-dependencies.ini"
+            }
+        }
+        stage('Run user-project-test') {
+            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'user-project-test'} }
+            steps {
+                sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key -v $INTEGRATION_TESTS_CONFIG:/etc/openbaton/integration-tests/integration-tests.properties openbaton/integration-tests:${params.BRANCH} user-project-test.ini"
+            }
+        }
+        stage('Run stress-test') {
+            when { expression { params.TEST_SET == 'stress-test'} }
+            steps {
+                sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key -v $INTEGRATION_TESTS_CONFIG:/etc/openbaton/integration-tests/integration-tests.properties openbaton/integration-tests:${params.BRANCH} stress-test.ini"
             }
         }
     }
