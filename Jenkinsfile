@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Test min_nomysql scenario') {
             steps {
-                build job: 'test-main', parameters: [string(name: 'SYSTEM_UNDER_TEST', value: 'min_nomysql-compose'), string(name: 'BRANCH', value: 'master'), booleanParam(name: 'TRIGGER_BUILD', value: true), string(name: 'TEST_SET', value: 'all'), string(name: 'VNFM_TO_TEST', value: 'all'), string(name: 'VIM_LOCATION', value: '192.168.161.121')]
+                build job: 'test-main', parameters: [string(name: 'SYSTEM_UNDER_TEST', value: 'min_nomysql-compose'), string(name: 'BRANCH', value: 'master'), booleanParam(name: 'TRIGGER_BUILD', value: true), string(name: 'TEST_SET', value: 'all'), string(name: 'VNFM_TO_TEST', value: 'all'), string(name: 'VIM_LOCATION', value: 'pop')]
             }
         }
     }
