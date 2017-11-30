@@ -7,7 +7,6 @@
 5. [Pipelines tl;dr](#pipelines-tldr)
 6. [Add vim-instance](#add-vim-instance)
 7. [Add integration-test](#add-integration-test)
-8. [TODO](#todo)
 
 ## Introduction
 With multiple possible deployment configurations and multiple test suits to cover most use cases, testing gets overwhelmingly complex.
