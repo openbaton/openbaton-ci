@@ -84,6 +84,7 @@ Because the integration tests need some "node specific" configuration (i.e. real
 - `PEM_FILE`: Path to ssh private key
 - `VIM_FILES`: Path to vim files
 
+Please be sure to provide a working default vimfile called `pop.json` inside your `VIM_FILES` folder, this will be used in your pipelines if not specifically overwritten. Information how to create your `pop.json` can be found [here](https://openbaton.github.io/documentation/pop-registration/)
 ## Pipelines tldr
 ### Docker compose files
 - `min-compose`: nfvo, generic/dummy-rest/dummy-amqp vnfms, rabbitmq, mysql
