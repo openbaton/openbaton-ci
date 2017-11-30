@@ -61,9 +61,9 @@ pipeline {
             choices: 'simple\nall',
             description: 'Run only the most simple tests or all'
         )
-        choice(
+        string(
             name: 'VIM_LOCATION',
-            choices: '192.168.161.121\n192.168.161.151\n192.168.161.221',
+            defaultValue: 'pop',
             description: 'Which openstack testbed to use'
         )
     }
