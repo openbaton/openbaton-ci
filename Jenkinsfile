@@ -8,7 +8,7 @@ pipeline {
         )
         string(
             name: 'VIM_LOCATION',
-            defaultValue: '192.168.161.121',
+            defaultValue: 'pop',
             description: 'Which Openstack testbed to use'
         )
         string(
