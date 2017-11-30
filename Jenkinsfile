@@ -26,9 +26,9 @@ pipeline {
             choices: 'all\ngeneric\ndummy-amqp',
             description: 'Which vnfms to test against'
         )
-        choice(
+        string(
             name: 'VIM_LOCATION',
-            choices: '192.168.161.121\n192.168.161.151\n192.168.161.221',
+            defaultValue: 'pop',
             description: 'Which openstack testbed to use'
         )
     }
