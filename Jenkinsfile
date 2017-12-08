@@ -3,7 +3,7 @@ pipeline {
     parameters {
         choice(
             name: 'TEST_SET',
-            choices: 'all\nscenario-real-iperf\nscenario-complex-ncat\nscenario-scaling\nerror-in-configure\nerror-in-instantiate\nerror-in-start\nerror-in-terminate\nwrong-lifecycle-event\nsimple',
+            choices: 'all\nscenario-real-iperf\nscenario-complex-ncat\nscenario-scaling\nerror-in-configure\nerror-in-instantiate\nerror-in-start\nerror-in-terminate\nwrong-lifecycle-event\nscenario-real-sipp-fms-heal\nsimple',
             description: 'Integration tests to run'
         )
         string(
@@ -85,6 +85,12 @@ pipeline {
             when { expression { params.TEST_SET == 'stress-test'} }
             steps {
                 sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key -v $INTEGRATION_TESTS_CONFIG:/etc/openbaton/integration-tests/integration-tests.properties -v $VIM_FILES/${params.VIM_LOCATION}.json:/etc/openbaton/integration-tests/vim-instances/real-vim.json openbaton/integration-tests:${params.BRANCH} stress-test.ini"
+            }
+        }
+        stage('Run fms-heal') {
+            when { expression { params.TEST_SET == 'scenario-real-sipp-fms-heal'} }
+            steps {
+                sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key -v $INTEGRATION_TESTS_CONFIG:/etc/openbaton/integration-tests/integration-tests.properties -v $VIM_FILES/${params.VIM_LOCATION}.json:/etc/openbaton/integration-tests/vim-instances/real-vim.json openbaton/integration-tests:${params.BRANCH} scenario-real-sipp-fms-heal.ini"
             }
         }
     }
