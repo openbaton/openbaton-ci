@@ -73,7 +73,7 @@ pipeline {
                             if (params.SYSTEM_UNDER_TEST == 'full-compose') {
                                 sh "sed -i '/volume/,+1 d' full-compose.yml"
                             }
-                            sh "env HOST_IP=$HOST_IP ZABBIX_IP=$ZABBIX_IP docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml up -d"
+                            sh "env HOST_IP=$HOST_IP docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml up -d"
                         }
                     } else {
                         sh "docker run --rm -d -h openbaton-rabbitmq -p 8080:8080 -p 5672:5672 -p 15672:15672 -p 8443:8443 -e RABBITMQ_BROKERIP=$HOST_IP --name=openbaton-standalone openbaton/standalone:latest"
