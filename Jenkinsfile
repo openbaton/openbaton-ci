@@ -79,7 +79,7 @@ pipeline {
                         sh "docker run --rm -d -h openbaton-rabbitmq -p 8080:8080 -p 5672:5672 -p 15672:15672 -p 8443:8443 -e RABBITMQ_BROKERIP=$HOST_IP --name=openbaton-standalone openbaton/standalone:latest"
                     }
                 }
-                sh "timeout 600 bash -c 'until curl -sSf http://localhost:8080; do sleep 10;done'"
+                sh "timeout 600 bash -c 'until curl -sSf http://$HOST_IP:8080; do sleep 10;done'"
                 sleep 20
             }
         }
