@@ -70,6 +70,9 @@ pipeline {
                             if (params.BRANCH != 'master' && params.BRANCH != 'develop') {
                                 sh "sed -i 's/latest/${params.BRANCH}/g' ${params.SYSTEM_UNDER_TEST}.yml"
                             }
+                            if (params.SYSTEM_UNDER_TEST == 'full-compose') {
+                                sh "sed '/volume/,+1 d' full-compose.yml"
+                            }
                             sh "env HOST_IP=$HOST_IP docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml up -d"
                         }
                     } else {
