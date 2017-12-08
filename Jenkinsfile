@@ -48,7 +48,7 @@ pipeline {
         )
         choice(
             name: 'SYSTEM_UNDER_TEST',
-            choices: 'min_nomysql-compose\nmin-compose',
+            choices: 'min_nomysql-compose\nmin-compose\nfull-compose',
             description: 'System under test to use'
         )
         choice(
@@ -56,10 +56,10 @@ pipeline {
             choices: 'all\ngeneric\ndummy-amqp\nnone',
             description: 'Which vnfms to test against'
         )
-        choice(
+        string(
             name: 'TEST_SET',
-            choices: 'simple\nall',
-            description: 'Run only the most simple tests or all'
+            defaultValue: 'simple',
+            description: 'Run only the most "simple" tests, a specific scenario or "all"'
         )
         string(
             name: 'VIM_LOCATION',
