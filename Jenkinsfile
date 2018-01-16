@@ -35,7 +35,7 @@ pipeline {
             }
         }
         stage('Run scenario-complex-ncat') {
-            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'scenario-complex-ncat'} }
+            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'scenario-complex-ncat'} || params.TEST_SET == 'complex'} }
             steps {
                 sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $CONFIG:/etc/openbaton/integration-tests -v $VIM_FILES/${params.VIM_LOCATION}.json:/etc/openbaton/integration-tests/vim-instances/real-vim.json openbaton/integration-tests:${params.BRANCH} scenario-complex-ncat.ini"
             }
