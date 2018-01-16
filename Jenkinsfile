@@ -18,8 +18,8 @@ pipeline {
         )
         string(
             name: 'TEST_SET',
-            defaultValue: 'simple',
-            description: 'Run only the most "simple" tests or "all" or "scenario-name"'
+            defaultValue: 'complex',
+            description: 'Run only the most "simple", the most "complex" tests, "all" or "scenario-name"'
         )
         choice(
             name: 'VNFM_TO_TEST',
@@ -100,7 +100,7 @@ pipeline {
                             }
                         }
                     } else {
-                        build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: '4.0.0')]
+                        build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: 'latest')]
                     }
                 }
             }
