@@ -119,8 +119,7 @@ pipeline {
                 if (params.SYSTEM_UNDER_TEST != 'standalone') {
                     dir('distributions/docker/compose') {
                         sh "for container in \$(docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml ps|grep $BUILD_NUMBER|awk '{print \$1}');do docker logs \$container > ../../../\$container.log 2>&1;done"
-                        sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml down"
-                        sh "docker volume rm \$(docker volume ls -q -f dangling=true)"
+                        sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml down -v"
                     }
                 }
                 else {
