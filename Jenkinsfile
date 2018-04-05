@@ -40,7 +40,7 @@ pipeline {
             }
         }
         stage('Run stress-test') {
-            when { expression { params.TEST_SET == 'stress-test'} }
+            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'stress-test'} }
             steps {
                 sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $CONFIG:/etc/openbaton/integration-tests -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key openbaton/integration-tests:${params.BRANCH} stress-test.ini"
             }
