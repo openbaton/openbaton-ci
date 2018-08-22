@@ -48,7 +48,7 @@ pipeline {
         )
         choice(
             name: 'SYSTEM_UNDER_TEST',
-            choices: 'min_nomysql-compose\nmin-compose\nfull-compose',
+            choices: 'min_nomysql-compose\nmin-compose\ndockervnfm-compose\nfull-compose',
             description: 'System under test to use'
         )
         choice(
