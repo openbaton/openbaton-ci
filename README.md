@@ -111,6 +111,7 @@ Please be sure to provide a working default vimfile called `pop.json` inside you
 - `min-compose`: nfvo, generic/dummy-rest/dummy-amqp vnfms, rabbitmq, mysql
 - `min_nomysql-compose`: as above, but with in memory db (fastest deploy)
 - `full-compose`: Full deployment with all external components. No sense in using yet as there are no tests for the components
+- `dockervnfm-compose`: Deployment of nfvo, generic- and docker-vnfm, rabbitmq, mysql
 
 ### Periodic or hooked builds
 To set a pipeline to automatically build based on cron-style times, see the example pipeline for [every night](https://github.com/openbaton/openbaton-ci/blob/dd58f3f88719edee5b453fd2aac34bad95da7c0a/Jenkinsfile#L8). The syntax is described [here](https://jenkins.io/doc/book/pipeline/syntax/#triggers). If unfamiliar with cron-style strings, check [here](https://crontab-generator.org/).
