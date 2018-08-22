@@ -6,13 +6,18 @@ pipeline {
             defaultValue: 'refs/heads/master',
             description: 'Branch or tag, e.g. "refs/heads/<branchName>" or "refs/tags/<tagName>, leave empty to pass'
         )
-	      string(
+	string(
             name: 'NFVO',
             defaultValue: 'refs/tags/5.0.0',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
         string(
             name: 'VNFM_GENERIC',
+            defaultValue: 'refs/tags/5.0.0',
+            description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
+        )
+        string(
+            name: 'VNFM_DOCKER_GO',
             defaultValue: 'refs/tags/5.0.0',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
@@ -28,6 +33,11 @@ pipeline {
         )
         string(
             name: 'PLUGIN_VIMDRIVER_OPENSTACK',
+            defaultValue: 'refs/tags/5.0.0',
+            description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
+        )
+        string(
+            name: 'PLUGIN_VIMDRIVER_DOCKER',
             defaultValue: 'refs/tags/5.0.0',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
@@ -93,6 +103,19 @@ pipeline {
                         }
                     }
                 }
+                stage('Build vnfm-docker-go') {
+                    when { expression { params.VNFM_DOCKER_GO != ''} }
+                    steps {
+                        script {
+                            tag = params.VNFM_GENERIC.tokenize("/").last()
+                            tag = (tag == 'master' || tag == 'develop') ? 'latest' : tag
+                        }
+                        dir('vnfm-docker-go') {
+                            checkout([$class: 'GitSCM', branches: [[name: params.VNFM_GENERIC]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/openbaton/go-docker-vnfm.git']]])
+                            sh "docker build -t openbaton/vnfm-docker-go:$tag ."
+                        }
+                    }
+                }
                 stage('Build vnfm-dummy-amqp') {
                     when { expression { params.VNFM_DUMMY_AMQP != ''} }
                     steps {
@@ -116,6 +139,19 @@ pipeline {
                         dir('test-plugin') {
                             checkout([$class: 'GitSCM', branches: [[name: params.PLUGIN_VIMDRIVER_TEST]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/openbaton/test-plugin.git']]])
                             sh "docker build -t openbaton/plugin-vimdriver-test:$tag ."
+                        }
+                    }
+                }
+                stage('Build docker-plugin') {
+                    when { expression { params.PLUGIN_VIMDRIVER_TEST != ''} }
+                    steps {
+                        script {
+                            tag = params.PLUGIN_VIMDRIVER_TEST.tokenize("/").last()
+                            tag = (tag == 'master' || tag == 'develop') ? 'latest' : tag
+                        }
+                        dir('go-plugin') {
+                            checkout([$class: 'GitSCM', branches: [[name: params.PLUGIN_VIMDRIVER_TEST]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/openbaton/go-docker-driver.git']]])
+                            sh "docker build -t openbaton/driver-docker-go:$tag ."
                         }
                     }
                 }
