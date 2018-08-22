@@ -3,7 +3,7 @@ pipeline {
     parameters {
         choice(
             name: 'SYSTEM_UNDER_TEST',
-            choices: 'min_nomysql-compose\nmin-compose\nfull-compose\nstandalone',
+            choices: 'min_nomysql-compose\nmin-compose\ndockervnfm-compose\nfull-compose\nstandalone',
             description: 'System under test to use'
         )
         choice(
