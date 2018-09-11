@@ -32,7 +32,17 @@ pipeline {
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
         string(
+            name: 'VNFM_DOCKER',
+            defaultValue: 'refs/heads/master',
+            description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
+        )
+        string(
             name: 'PLUGIN_VIMDRIVER_TEST',
+            defaultValue: 'refs/heads/master',
+            description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
+        )
+        string(
+            name: 'PLUGIN_VIMDRIVER_DOCKER',
             defaultValue: 'refs/heads/master',
             description: 'Branch or tag, e.g "refs/heads/<branchName>" or "refs/tags/<tagName>", leave empty to pass'
         )
@@ -53,7 +63,7 @@ pipeline {
         )
         choice(
             name: 'VNFM_TO_TEST',
-            choices: 'all\ngeneric\ndummy-amqp\nnone',
+            choices: 'all\ngeneric\ndummy-amqp\ndocker\nnone',
             description: 'Which vnfms to test against'
         )
         string(
@@ -141,6 +151,15 @@ pipeline {
                         }
                     }
                 }
+                stage('Build vnfm-docker') {
+                    when { expression { params.VNFM_DOCKER != '' } }
+                    steps {
+                        dir('vnfm-docker') {
+                            checkout([$class: 'GitSCM', branches: [[name: params.VNFM_DOCKER]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/openbaton/go-docker-vnfm.git']]])
+                            sh 'docker build . -t openbaton/vnfm-docker-go:local'
+                        }
+                    }
+                }
                 stage('Build plugin-test') {
                     when { expression { params.PLUGIN_VIMDRIVER_TEST != '' } }
                     steps {
@@ -166,6 +185,15 @@ pipeline {
                                 }
                             }
                             sh 'docker build . -t openbaton/plugin-vimdriver-openstack-4j:local'
+                        }
+                    }
+                }
+                stage('Build plugin-docker') {
+                    when { expression { params.PLUGIN_VIMDRIVER_DOCKER != '' } }
+                    steps {
+                        dir('plugin-docker') {
+                            checkout([$class: 'GitSCM', branches: [[name: params.PLUGIN_VIMDRIVER_TEST]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/openbaton/go-docker-driver.git']]])
+                            sh 'docker build . -t openbaton/driver-docker-go:local'
                         }
                     }
                 }
@@ -197,11 +225,17 @@ pipeline {
                     if (params.VNFM_DUMMY_AMQP == '') {
                         sh 'docker tag openbaton/vnfm-dummy-amqp:latest openbaton/vnfm-dummy-amqp:local'
                     }
+                    if (params.VNFM_DOCKER == '') {
+                        sh 'docker tag openbaton/vnfm-docker-go:latest openbaton/vnfm-docker-go:local'
+                    }
                     if (params.PLUGIN_VIMDRIVER_TEST == '') {
                         sh 'docker tag openbaton/plugin-vimdriver-test:latest openbaton/plugin-vimdriver-test:local'
                     }
                     if (params.PLUGIN_VIMDRIVER_OPENSTACK == '') {
                         sh 'docker tag openbaton/plugin-vimdriver-openstack-4j:latest openbaton/plugin-vimdriver-openstack-4j:local'
+                    }
+                    if (params.PLUGIN_VIMDRIVER_DOCKER == '') {
+                        sh 'docker tag openbaton/driver-docker-go:latest openbaton/driver-docker-go:local'
                     }
                     if (params.INTEGRATION_TESTS == '') {
                         sh 'docker tag openbaton/integration-tests:latest openbaton/integration-tests:local'
