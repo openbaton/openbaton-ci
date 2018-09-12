@@ -33,6 +33,7 @@ pipeline {
                 sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $CONFIG:/etc/openbaton/integration-tests -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key openbaton/integration-tests:${params.BRANCH} scenario-docker-iperf.ini"
             }
         }
+    }
     post {
         failure {
             /* TODO: save log files */
