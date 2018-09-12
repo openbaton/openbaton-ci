@@ -23,7 +23,7 @@ pipeline {
         )
         choice(
             name: 'VNFM_TO_TEST',
-            choices: 'all\ngeneric\ndummy-amqp',
+            choices: 'all\ngeneric\ndummy-amqp\ndocker',
             description: 'Which vnfms to test against'
         )
         string(
@@ -109,6 +109,15 @@ pipeline {
                     tag = (params.BRANCH == 'master' || params.BRANCH == 'develop') ? 'latest' : params.BRANCH 
                 }
                 build job: 'test-dummy', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'BRANCH', value: tag)]
+            }
+        }
+        stage('Test docker') {
+            when { expression { params.SYSTEM_UNDE_TEST != 'standalone' && (params.VNFM_TO_TEST == 'docker' || params.VNFM_TO_TEST == 'all') } }
+            steps {
+                script {
+                    tag = (params.BRANCH == 'master' || params.BRANCH == 'develop') ? 'latest' : prams.BRANCH
+                }
+                build job: 'test-docker', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'BRANCH', value: tag)]
             }
         }
     }
