@@ -115,7 +115,7 @@ pipeline {
             when { expression { params.SYSTEM_UNDE_TEST != 'standalone' && (params.VNFM_TO_TEST == 'docker' || params.VNFM_TO_TEST == 'generic+docker' || params.VNFM_TO_TEST == 'all') } }
             steps {
                 script {
-                    tag = (params.BRANCH == 'master' || params.BRANCH == 'develop') ? 'latest' : prams.BRANCH
+                    tag = (params.BRANCH == 'master' || params.BRANCH == 'develop') ? 'latest' : params.BRANCH
                 }
                 build job: 'test-docker', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'BRANCH', value: tag)]
             }
