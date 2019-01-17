@@ -63,7 +63,7 @@ pipeline {
         )
         choice(
             name: 'VNFM_TO_TEST',
-            choices: 'all\ngeneric\ndummy-amqp\ndocker\nnone',
+            choices: 'all\ngeneric\ndummy-amqp\ngeneric+docker\ndocker\nnone',
             description: 'Which vnfms to test against'
         )
         string(
