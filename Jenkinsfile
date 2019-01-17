@@ -112,7 +112,7 @@ pipeline {
             }
         }
         stage('Test docker') {
-            when { expression { params.SYSTEM_UNDE_TEST != 'standalone' && (params.VNFM_TO_TEST == 'docker' || params.VNFM_TO_TEST == 'generic+docker' || params.VNFM_TO_TEST == 'all') } }
+            when { expression { params.SYSTEM_UNDER_TEST != 'standalone' && (params.VNFM_TO_TEST == 'docker' || params.VNFM_TO_TEST == 'generic+docker' || params.VNFM_TO_TEST == 'all') } }
             steps {
                 script {
                     tag = (params.BRANCH == 'master' || params.BRANCH == 'develop') ? 'latest' : params.BRANCH
