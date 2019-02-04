@@ -68,9 +68,11 @@ pipeline {
                         git branch: 'master', url: 'https://github.com/openbaton/bootstrap.git'
                         //dir('distributions/docker/compose') {
                         if (params.BRANCH != 'master' && params.BRANCH != 'develop') {
-                            sh "sed -i 's/latest/${params.BRANCH}/g' ${params.SYSTEM_UNDER_TEST}.yml"
+                            //sh "sed -i 's/latest/${params.BRANCH}/g' ${params.SYSTEM_UNDER_TEST}.yml"
+                            sh "sed -i 's/latest/${params.BRANCH}/g' docker-compose.yml"
                         }
-                        sh "env HOST_IP=$HOST_IP docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml up -d"
+                        //sh "env HOST_IP=$HOST_IP docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml up -d"
+                        sh "env HOST_IP=$HOST_IP docker-compose -p $BUILD_NUMBER up -d"
                         //}
                     } else {
                         sh "docker run --rm -d -h openbaton-rabbitmq -p 8080:8080 -p 5672:5672 -p 15672:15672 -p 8443:8443 -e RABBITMQ_BROKERIP=$HOST_IP --name=openbaton-standalone openbaton/standalone:latest"
@@ -86,7 +88,8 @@ pipeline {
                 script {
                     if (params.SYSTEM_UNDER_TEST != 'standalone') {
                         //dir('distributions/docker/compose') {
-                        sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml restart vnfm_generic"
+                        //sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml restart vnfm_generic"
+                        sh "docker-compose -p $BUILD_NUMBER restart vnfm_generic"
                         sleep 10
                         if (params.BRANCH == 'local') {
                             build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: 'local')]
@@ -127,8 +130,10 @@ pipeline {
             script {
                 if (params.SYSTEM_UNDER_TEST != 'standalone') {
                     //dir('distributions/docker/compose') {      
-                    sh "for container in \$(docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml ps|grep $BUILD_NUMBER|awk '{print \$1}');do docker logs \$container > ../../../\$container.log 2>&1;done"
-                    sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml down -v"
+                    //sh "for container in \$(docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml ps|grep $BUILD_NUMBER|awk '{print \$1}');do docker logs \$container > ../../../\$container.log 2>&1;done"
+                    sh "for container in \$(docker-compose -p $BUILD_NUMBER ps|grep $BUILD_NUMBER|awk '{print \$1}');do docker logs \$container > ../../../\$container.log 2>&1;done"
+                    //sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml down -v"
+                    sh "docker-compose -p $BUILD_NUMBER down -v"
                     //}
                 }
                 else {
