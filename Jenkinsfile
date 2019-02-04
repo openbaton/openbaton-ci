@@ -65,13 +65,13 @@ pipeline {
                 script {
                     sh 'rm -rf */||true'
                     if (params.SYSTEM_UNDER_TEST != 'standalone') {
-                        git branch: 'develop', url: 'https://github.com/openbaton/bootstrap.git'
-                        dir('distributions/docker/compose') {
-                            if (params.BRANCH != 'master' && params.BRANCH != 'develop') {
-                                sh "sed -i 's/latest/${params.BRANCH}/g' ${params.SYSTEM_UNDER_TEST}.yml"
-                            }
-                            sh "env HOST_IP=$HOST_IP docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml up -d"
+                        git branch: 'master', url: 'https://github.com/openbaton/bootstrap.git'
+                        //dir('distributions/docker/compose') {
+                        if (params.BRANCH != 'master' && params.BRANCH != 'develop') {
+                            sh "sed -i 's/latest/${params.BRANCH}/g' ${params.SYSTEM_UNDER_TEST}.yml"
                         }
+                        sh "env HOST_IP=$HOST_IP docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml up -d"
+                        //}
                     } else {
                         sh "docker run --rm -d -h openbaton-rabbitmq -p 8080:8080 -p 5672:5672 -p 15672:15672 -p 8443:8443 -e RABBITMQ_BROKERIP=$HOST_IP --name=openbaton-standalone openbaton/standalone:latest"
                     }
@@ -85,17 +85,17 @@ pipeline {
             steps {
                 script {
                     if (params.SYSTEM_UNDER_TEST != 'standalone') {
-                        dir('distributions/docker/compose') {
-                            sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml restart vnfm-generic"
-                            sleep 10
-                            if (params.BRANCH == 'local') {
-                                build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: 'local')]
-                            } else if (params.BRANCH == 'master' || params.BRANCH == 'develop') {
-                                build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: 'latest')]
-                            } else {
-                                build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: params.BRANCH)]
-                            }
+                        //dir('distributions/docker/compose') {
+                        sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml restart vnfm_generic"
+                        sleep 10
+                        if (params.BRANCH == 'local') {
+                            build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: 'local')]
+                        } else if (params.BRANCH == 'master' || params.BRANCH == 'develop') {
+                            build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: 'latest')]
+                        } else {
+                            build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: params.BRANCH)]
                         }
+                        //}
                     } else {
                         build job: 'test-generic', parameters: [string(name: 'TEST_SET', value: params.TEST_SET), string(name: 'VIM_LOCATION', value: params.VIM_LOCATION), string(name: 'BRANCH', value: 'latest')]
                     }
@@ -126,10 +126,10 @@ pipeline {
             sh 'rm -rf *-log *.log || true'
             script {
                 if (params.SYSTEM_UNDER_TEST != 'standalone') {
-                    dir('distributions/docker/compose') {
-                        sh "for container in \$(docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml ps|grep $BUILD_NUMBER|awk '{print \$1}');do docker logs \$container > ../../../\$container.log 2>&1;done"
-                        sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml down -v"
-                    }
+                    //dir('distributions/docker/compose') {      
+                    sh "for container in \$(docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml ps|grep $BUILD_NUMBER|awk '{print \$1}');do docker logs \$container > ../../../\$container.log 2>&1;done"
+                    sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml down -v"
+                    //}
                 }
                 else {
                     sh "docker cp openbaton-standalone:/var/log/openbaton ./standalone-log"
