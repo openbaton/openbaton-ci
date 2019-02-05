@@ -129,9 +129,9 @@ pipeline {
             sh 'rm -rf *-log *.log || true'
             script {
                 if (params.SYSTEM_UNDER_TEST != 'standalone') {
-                    //dir('distributions/docker/compose') {      
+                    //dir('distributions/docker/compose') {
                     //sh "for container in \$(docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml ps|grep $BUILD_NUMBER|awk '{print \$1}');do docker logs \$container > ../../../\$container.log 2>&1;done"
-                    sh "for container in \$(docker-compose -p $BUILD_NUMBER ps|grep $BUILD_NUMBER|awk '{print \$1}');do docker logs \$container > ../../../\$container.log 2>&1;done"
+                    sh "for container in \$(docker-compose -p $BUILD_NUMBER ps|grep $BUILD_NUMBER|awk '{print \$1}');do docker logs \$container > \$container.log 2>&1;done"
                     //sh "docker-compose -p $BUILD_NUMBER -f ${params.SYSTEM_UNDER_TEST}.yml down -v"
                     sh "docker-compose -p $BUILD_NUMBER down -v"
                     //}
