@@ -22,13 +22,13 @@ pipeline {
 
     stages {
         stage('Run scenario-docker-deploy') {
-            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'scenario-docker-deploy' || params.TEST_SET == 'simple' } }
+            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'scenario-docker-deploy' || params.TEST_SET == 'simple' || params.TEST_SET == 'complex' } }
             steps {
                 sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $CONFIG:/etc/openbaton/integration-tests -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key openbaton/integration-tests:${params.BRANCH} scenario-docker-deploy.ini"
             }
         }
         stage('Run scenario-docker-iperf') {
-            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'scenario-docker-iperf' } }
+            when { expression { params.TEST_SET == 'all' || params.TEST_SET == 'scenario-docker-iperf'  || params.TEST_SET == 'complex' } }
             steps {
                 sh "docker run -P --rm --name integration-tests -p 8181:8181 -v $CONFIG:/etc/openbaton/integration-tests -v $PEM_FILE:/etc/openbaton/integration-test/integration-test.key openbaton/integration-tests:${params.BRANCH} scenario-docker-iperf.ini"
             }
