@@ -3,7 +3,7 @@ pipeline {
     parameters {
         choice(
             name: 'TEST_SET',
-            choices: 'all\nscenario-docker-deploy\nscenario-docker-iperf\nsimple',
+            choices: 'all\ncomplex\nscenario-docker-deploy\nscenario-docker-iperf\nsimple',
             description: 'Integration tests to run'
         )
         string(
