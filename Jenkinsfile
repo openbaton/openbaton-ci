@@ -3,7 +3,7 @@ pipeline {
     parameters {
         choice(
             name: 'TEST_SET',
-            choices: 'all\nscenario-real-iperf\nscenario-complex-ncat\nscenario-scaling\nerror-in-configure\nerror-in-instantiate\nerror-in-start\nerror-in-terminate\nwrong-lifecycle-event\nscenario-real-sipp-fms-heal\nsimple',
+            choices: 'all\ncomplex\nscenario-real-iperf\nscenario-complex-ncat\nscenario-scaling\nerror-in-configure\nerror-in-instantiate\nerror-in-start\nerror-in-terminate\nwrong-lifecycle-event\nscenario-real-sipp-fms-heal\nsimple',
             description: 'Integration tests to run'
         )
         string(
